@@ -13,17 +13,19 @@ public class Bullet : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log(collision.gameObject.name);
-        GameObject xplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
-        
-        Destroy(this.gameObject);
-        Destroy(xplosion,3.0f);
+        if (collision.gameObject.tag == "Asteroid")
+        {
+            //Debug.Log(collision.gameObject.name);
+            GameObject xplosion = Instantiate(explosion, transform.position, Quaternion.identity);
+            
 
-        //print("COLLISION!!!");
-        
+            Destroy(xplosion,1.5f);
+            Destroy(this.gameObject);
+        }
     }
 }
