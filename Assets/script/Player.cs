@@ -106,13 +106,13 @@ public class Player : NetworkBehaviour {
         if (Input.GetKey(KeyCode.LeftShift))
         {
             if (this.speed < 40)
-                speed += 1f;
+                speed += 0.3f;
         }
         //shooting 
         if (Input.GetKey(KeyCode.LeftControl))
         {
             if (this.speed >2)
-                speed -= 1f;
+                speed -= 0.3f;
         }
     }
 
@@ -149,7 +149,28 @@ public class Player : NetworkBehaviour {
            
 
     }
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+        //CmdRespawn();
+    }
+
+    [Command]
+    void CmdRespawn()
+    {
+        GameObject player = Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
+        //NetworkServer.UnSpawn(this.gameObject);
+        //NetworkServer.Spawn(player);
+        NetworkManager.Destroy(this.gameObject);
+        NetworkServer.DestroyPlayersForConnection(this.connectionToClient);
+        NetworkServer.AddPlayerForConnection(this.connectionToClient,player,this.playerControllerId);
+        //NetworkServer.ReplacePlayerForConnection(this.connectionToClient, player, this.playerControllerId);
+        //var spawn = NetworkManager.singleton.GetStartPosition();
+        //var newPlayer = (GameObject)Instantiate(NetworkManager.singleton.playerPrefab, Vector3.zero, Quaternion.identity);
+        //Destroy(this.gameObject);
+        //NetworkServer.Destroy(this.gameObject);
+        //NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer, this.playerControllerId);
+    }
+
 
     private void Awake()
     {
