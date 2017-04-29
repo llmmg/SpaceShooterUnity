@@ -8,8 +8,8 @@ public class Player : NetworkBehaviour {
     private Mesh theMesh;
 
     public float speed;
-    public float horTurnSpeed = 20f;
-    public float verTurnSpeed = 10f;
+    public float horTurnSpeed;
+    public float verTurnSpeed;
 
     public GameObject bulletPrefab;
 
@@ -79,18 +79,24 @@ public class Player : NetworkBehaviour {
     }
 
     // Update is called once per frame
-    void LateUpdate () {
+    void LateUpdate() {
         //change position of player if off map
         //rePos(rb);
-        
+
         rb.velocity = transform.forward * speed;
         float x = Input.GetAxis("Vertical");
         float y = Input.GetAxis("Horizontal");
 
-        
-        rb.AddRelativeTorque(x * verTurnSpeed*Time.deltaTime, y * horTurnSpeed* Time.deltaTime, 0);
-        rb.AddRelativeTorque(y * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);
-        //rb.AddRelativeTorque(x * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);
+
+
+        print(rb.angularVelocity.sqrMagnitude.ToString());
+
+        if (rb.angularVelocity.sqrMagnitude <= 2)
+        {
+            rb.AddRelativeTorque(x * verTurnSpeed * Time.deltaTime, y * horTurnSpeed * Time.deltaTime, 0);
+            rb.AddRelativeTorque(y * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);
+            //rb.AddRelativeTorque(x * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);
+        }
 
 
 
