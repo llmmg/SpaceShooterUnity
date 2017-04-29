@@ -99,6 +99,18 @@ public class Player : NetworkBehaviour {
         {          
             CmdFire();
         }
+        //shooting 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (this.speed < 40)
+                speed += 1f;
+        }
+        //shooting 
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            if (this.speed >2)
+                speed -= 1f;
+        }
     }
 
     [Command]
