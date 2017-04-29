@@ -41,6 +41,7 @@ public class Player : NetworkBehaviour {
         if (!myObject)
         {
             myObject = this.transform;
+           
         }
         
         theMesh = myObject.GetComponent<MeshFilter>().mesh as Mesh;
@@ -88,13 +89,9 @@ public class Player : NetworkBehaviour {
         rb.velocity = transform.forward * speed;
         float x = Input.GetAxis("Vertical");
         float y = Input.GetAxis("Horizontal");
-
-
-        print(rb.angularVelocity.ToString());
   
         //up/Down
         rb.AddRelativeTorque(x * verTurnSpeed * Time.deltaTime, y * horTurnSpeed * Time.deltaTime, 0);
-   
         //barel roll
         rb.AddRelativeTorque(y * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);
         //rb.AddRelativeTorque(x * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);

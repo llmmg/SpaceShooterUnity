@@ -17,7 +17,7 @@ public class Bullet : NetworkBehaviour {
 	}
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.name);
+        //Debug.Log(collision.gameObject.name);
         GameObject xplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
         
         Destroy(this.gameObject);
