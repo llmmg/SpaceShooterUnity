@@ -179,6 +179,26 @@ public class Player : NetworkBehaviour {
         Vector3 viewPos = Camera.main.WorldToScreenPoint(GameObject.FindWithTag("Player").transform.position);
        
         print(viewPos);
+        //print(Screen.height + " width: " + Screen.width);
+        //729 1440
+        if (viewPos.x < 0)
+            viewPos.x = 0;
+        if (viewPos.x > Screen.width)
+            viewPos.x = Screen.width;
+        if(viewPos.y <0)
+        {
+            viewPos.y = 0;
+        }
+        if(viewPos.y>Screen.height)
+        {
+            viewPos.y = Screen.height;
+        }
+        
+        if (viewPos.z < 0)
+        {
+            viewPos.x += Screen.width - viewPos.x;
+            viewPos.y += Screen.height - viewPos.y;
+        }
 
         mire.transform.position = (viewPos);       
 
