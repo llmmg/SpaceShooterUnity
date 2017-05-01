@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 
 public class Bullet : NetworkBehaviour {
     public GameObject explosion;
+    private Player collidePlayer;
 
     // Use this for initialization
     void Start () {
@@ -23,6 +24,14 @@ public class Bullet : NetworkBehaviour {
             GameObject xplosion = Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(xplosion,1.5f);
             Destroy(this.gameObject);
+
         }
+
+        if (collision.gameObject.tag == "Player")
+        {
+            collidePlayer = this.transform.parent.GetComponent<Player>();
+            collidePlayer.incScore(100);
+        }
+
     }
 }

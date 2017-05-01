@@ -24,8 +24,4 @@ public class AsteroidGenerator : NetworkBehaviour {
         }
 
     }
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
