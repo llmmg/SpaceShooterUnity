@@ -71,7 +71,8 @@ public class Player : NetworkBehaviour {
         //init life points
         life = StartLife;
         score = StartScore;
-
+        lifeText.text = string.Format("Life: {0}", life);
+        scoreText.text = string.Format("Score: {0}", score);
         //Re-orient object
         //RotateMesh();
     }
@@ -135,7 +136,9 @@ public class Player : NetworkBehaviour {
 
     // Update is called once per frame
     void LateUpdate() {
-
+        Camera.main.transform.position = this.transform.position - this.transform.forward * 5 + this.transform.up * 2;
+        Camera.main.transform.LookAt(this.transform.position);
+        Camera.main.transform.rotation = transform.rotation;
         /* Limit field of server */
         rePos(rb);
 
@@ -217,22 +220,22 @@ public class Player : NetworkBehaviour {
 
         print("Respawn");
 
-        GameObject player = Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
+        //GameObject player = Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
         //NetworkServer.UnSpawn(this.gameObject);
         //NetworkServer.Spawn(player);
-        NetworkManager.Destroy(this.gameObject);
-        NetworkServer.DestroyPlayersForConnection(this.connectionToClient);
-        NetworkServer.AddPlayerForConnection(this.connectionToClient,player,this.playerControllerId);
-        NetworkServer.Spawn(player);
+        //NetworkManager.Destroy(this.gameObject);
+        //NetworkServer.DestroyPlayersForConnection(this.connectionToClient);
+        //NetworkServer.AddPlayerForConnection(this.connectionToClient,player,this.playerControllerId);
+        //NetworkServer.Spawn(player);
         //NetworkServer.ReplacePlayerForConnection(this.connectionToClient, player, this.playerControllerId);
         //var spawn = NetworkManager.singleton.GetStartPosition();
-        //var newPlayer = (GameObject)Instantiate(NetworkManager.singleton.playerPrefab, Vector3.zero, Quaternion.identity);
-        //Destroy(this.gameObject);
+        var newPlayer = (GameObject)Instantiate(NetworkManager.singleton.playerPrefab, Vector3.zero, Quaternion.identity);
+        Destroy(this.gameObject);
         //NetworkServer.Destroy(this.gameObject);
-        //NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer, this.playerControllerId);
+        NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer, this.playerControllerId);
 
 
-        
+
     }
 
 

@@ -16,7 +16,7 @@ public class SetupLocalPlayer : NetworkBehaviour {
             float size = this.transform.localScale.magnitude;
             Camera.main.transform.position = this.transform.position - this.transform.forward *5 + this.transform.up*2;
             Camera.main.transform.LookAt(this.transform.position);
-            Camera.main.transform.parent = this.transform;
+            //Camera.main.transform.parent = this.transform;
             
         }            
         //Camera.main.GetComponent().target=transform;
