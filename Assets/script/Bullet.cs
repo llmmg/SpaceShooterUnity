@@ -18,7 +18,7 @@ public class Bullet : NetworkBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Asteroid")
+        if (collision.gameObject.tag == "Asteroid" || collision.gameObject.tag == "Player")
         {
             GameObject xplosion = Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(xplosion,1.5f);
