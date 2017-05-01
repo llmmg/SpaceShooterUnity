@@ -26,16 +26,15 @@ public class Player : NetworkBehaviour {
     private float nextActionTime;
     public float period;
 
-    public int Startlife;
-
-    private int life;
+  
 
     private int score=0;
     Text scoreText;
 
     /* Life tools */
-    private int life =10;
     Text lifeText;
+    public int Startlife;
+    private int life;
 
     /* Field tools */
     public int FIELDLIMIT = 500;
