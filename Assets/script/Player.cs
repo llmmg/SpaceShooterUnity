@@ -24,25 +24,21 @@ public class Player : NetworkBehaviour {
 
     private float nextActionTime;
     public float period;
-	
+
+    private int life=10;
+    private int score=0;
+
     /* Const variables */
     private const int FIELDLIMIT = 500;
 
-    public int life;
-    public int score = 0; 
+    
+    
 
     // Use this for initialization
     void Start () {
         rotateAngleY = 0;
         speed = 10f;
         rb.maxAngularVelocity = 2;
-
-        /*this.transform.eulerAngles = new Vector3(
-            this.transform.eulerAngles.x,
-            this.transform.eulerAngles.y,
-            this.transform.eulerAngles.z+180
-            );*/
-
 
         if (!myObject)
         {
@@ -96,7 +92,6 @@ public class Player : NetworkBehaviour {
 
     // Update is called once per frame
     void LateUpdate() {
-        //change position of player if off map
         //rePos(rb);
 
         rb.velocity = transform.forward * speed;
@@ -164,7 +159,7 @@ public class Player : NetworkBehaviour {
     }
     private void OnCollisionEnter(Collision collision)
     {
-		 LostLife();
+		LostLife();
         if (life<0)
         {
             CmdRespawn();

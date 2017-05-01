@@ -20,10 +20,7 @@ public class Bullet : NetworkBehaviour {
     {
         if (collision.gameObject.tag == "Asteroid")
         {
-            //Debug.Log(collision.gameObject.name);
             GameObject xplosion = Instantiate(explosion, transform.position, Quaternion.identity);
-            
-
             Destroy(xplosion,1.5f);
             Destroy(this.gameObject);
         }
