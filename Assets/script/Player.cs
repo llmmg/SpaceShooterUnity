@@ -24,6 +24,12 @@ public class Player : NetworkBehaviour {
 
     private float nextActionTime;
     public float period;
+	
+    /* Const variables */
+    private const int FIELDLIMIT = 500;
+
+    public int life;
+    public int score = 0; 
 
     // Use this for initialization
     void Start () {
@@ -63,21 +69,28 @@ public class Player : NetworkBehaviour {
 
         theMesh.vertices = rotatedVerts;
     }
-	
+	public void incScore(int value)
+    {
+        score += value;
+    }
+    void LostLife()
+    {
+        life = life - 1;
+    }
     void rePos(Rigidbody rb)
     {
-        if (transform.position.x < 0)
-            rb.position = new Vector3(10, transform.position.y, transform.position.z);
-        if (transform.position.x > 500)
-            rb.position = new Vector3(490, transform.position.y, transform.position.z);
-        if (transform.position.y < 0)
-            rb.position = new Vector3(transform.position.x, 10, transform.position.z);
-        if (transform.position.y > 500)
-            rb.position = new Vector3(transform.position.x, 490, transform.position.z);
-        if (transform.position.z < 0)
-            rb.position = new Vector3(transform.position.x, transform.position.y, 10);
-        if (transform.position.z > 500)
-            rb.position = new Vector3(transform.position.x, transform.position.y, 490);
+        if (transform.position.x < -FIELDLIMIT)
+            rb.position = new Vector3(-FIELDLIMIT+10, transform.position.y, transform.position.z);
+        if (transform.position.x > FIELDLIMIT)
+            rb.position = new Vector3(FIELDLIMIT-10, transform.position.y, transform.position.z);
+        if (transform.position.y < -FIELDLIMIT)
+            rb.position = new Vector3(transform.position.x,-FIELDLIMIT+ 10, transform.position.z);
+        if (transform.position.y > FIELDLIMIT)
+            rb.position = new Vector3(transform.position.x, FIELDLIMIT - 10, transform.position.z);
+        if (transform.position.z < -FIELDLIMIT)
+            rb.position = new Vector3(transform.position.x, transform.position.y, -FIELDLIMIT+10);
+        if (transform.position.z > FIELDLIMIT)
+            rb.position = new Vector3(transform.position.x, transform.position.y, FIELDLIMIT - 10);
 
     }
 
@@ -151,7 +164,11 @@ public class Player : NetworkBehaviour {
     }
     private void OnCollisionEnter(Collision collision)
     {
-        //CmdRespawn();
+		 LostLife();
+        if (life<0)
+        {
+            CmdRespawn();
+        }
     }
 
     [Command]
