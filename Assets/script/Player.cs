@@ -40,6 +40,9 @@ public class Player : NetworkBehaviour {
     /* Field tools */
     public int FIELDLIMIT = 500;
 
+    public Text FTW;
+    private int i=0; //dirty index
+
 
     // Use this for initialization
     void Start () {
@@ -51,7 +54,7 @@ public class Player : NetworkBehaviour {
         /* Get transform */
         if (!myObject)
         {
-            myObject = this.transform;           
+            myObject = this.transform;
         }
 
         /* Get Life text */
@@ -173,36 +176,70 @@ public class Player : NetworkBehaviour {
         }
 
         //tracking --test
-        GameObject rectTrans= GameObject.Find("mire");
-        Text mire = rectTrans.GetComponent<Text>();
 
-        Vector3 viewPos = Camera.main.WorldToScreenPoint(GameObject.FindWithTag("Player").transform.position);
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
        
-        print(viewPos);
+
+        //get one player from players at each loop of update
+        i = (i + 1) % players.Length;
+        GameObject currentPlayer = players[i];
+
+        GameObject rectTrans = GameObject.Find("mire");
+        Text myText = rectTrans.GetComponent<Text>();
+
+        Vector3 viewPosTmp = Camera.main.WorldToScreenPoint(currentPlayer.transform.position);
+        correctedPos(ref viewPosTmp);
+
+        myText.transform.position = viewPosTmp;
+
+
+        //foreach (GameObject player in players)
+        //{
+        //    //Text myText = FTW.GetComponent<Text>();
+
+        //    //Position
+        //    //Vector3 viewPosTmp = Camera.main.WorldToScreenPoint(player.transform.position);
+        //    //correctedPos(ref viewPosTmp);
+        //    ////myText.transform.SetParent(GameObject.Find("Canvas").transform);
+            
+        //    //myText.transform.position = viewPosTmp;
+        //}
+
+        //GameObject rectTrans= GameObject.Find("mire");
+        //Text mire = rectTrans.GetComponent<Text>();
+        //Vector3 viewPos = Camera.main.WorldToScreenPoint(GameObject.FindWithTag("Player").transform.position);       
+        //print(viewPos);
+
+
         //print(Screen.height + " width: " + Screen.width);
         //729 1440
-        if (viewPos.x < 0)
-            viewPos.x = 0;
-        if (viewPos.x > Screen.width)
-            viewPos.x = Screen.width;
-        if(viewPos.y <0)
-        {
-            viewPos.y = 0;
-        }
-        if(viewPos.y>Screen.height)
-        {
-            viewPos.y = Screen.height;
-        }
-        
-        if (viewPos.z < 0)
-        {
-            viewPos.x += Screen.width - viewPos.x;
-            viewPos.y += Screen.height - viewPos.y;
-        }
+        //correctedPos(ref viewPos);
 
-        mire.transform.position = (viewPos);       
+        //mire.transform.position = (viewPos);       
 
 
+    }
+    void correctedPos(ref Vector3 viewedPos)
+    {
+        if (viewedPos.x < 0)
+            viewedPos.x = 0;
+        if (viewedPos.x > Screen.width)
+            viewedPos.x = Screen.width;
+        if (viewedPos.y < 0)
+        {
+            viewedPos.y = 0;
+        }
+        if (viewedPos.y > Screen.height)
+        {
+            viewedPos.y = Screen.height;
+        }
+
+        if (viewedPos.z < 0)
+        {
+            viewedPos.x += Screen.width - viewedPos.x;
+            viewedPos.y += Screen.height - viewedPos.y;
+        }
     }
 
     [Command]

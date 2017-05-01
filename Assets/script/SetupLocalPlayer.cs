@@ -5,8 +5,6 @@ using UnityEngine.Networking;
 
 public class SetupLocalPlayer : NetworkBehaviour {
 
-    private float newRotation;
-    private float oldRotation;
 
     // Use this for initialization
     void Start () {
