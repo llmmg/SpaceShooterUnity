@@ -202,9 +202,8 @@ public class Player : NetworkBehaviour {
         if (life<0)
         {
             CmdRespawn();
-            score = 0;
+            //score = 0;
             life = 10;
-            
         }
     }
 
