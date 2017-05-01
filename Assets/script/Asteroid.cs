@@ -16,9 +16,9 @@ public class Asteroid : NetworkBehaviour
 	}
     private void OnCollisionEnter(Collision collision)
     {
-        explosion.transform.localScale = new Vector3(100, 100, 100);
+        /*explosion.transform.localScale = new Vector3(100, 100, 100);
         Instantiate(explosion, transform.position, Quaternion.identity);
-        Destroy(this.gameObject,1);
+        Destroy(this.gameObject,1);*/
     }
 
 }

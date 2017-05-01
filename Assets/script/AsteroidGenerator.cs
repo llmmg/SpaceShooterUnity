@@ -8,8 +8,8 @@ public class AsteroidGenerator : NetworkBehaviour {
     public GameObject AsteroidPrefab;
 
     /* Const variables */ 
-    public int NUMBER_OF_ASTEROIDS = 500;
-    public int FIELDLIMIT = 500;
+    public int NUMBER_OF_ASTEROIDS;
+    public int FIELDLIMIT;
     public const int MAX_ASTEROID_SIZE = 60;
     public const int MIN_ASTEROID_SIZE = 5;
 
