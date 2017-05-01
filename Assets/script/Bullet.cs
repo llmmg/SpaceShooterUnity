@@ -18,13 +18,12 @@ public class Bullet : NetworkBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Asteroid")
+        if (collision.gameObject.tag == "Asteroid" || collision.gameObject.tag == "Player")
         {
             //Debug.Log(collision.gameObject.name);
             GameObject xplosion = Instantiate(explosion, transform.position, Quaternion.identity);
             
-
-            Destroy(xplosion,1.5f);
+            Destroy(xplosion,2f);
             Destroy(this.gameObject);
         }
     }

@@ -167,7 +167,7 @@ public class Player : NetworkBehaviour {
 		 LostLife();
         if (life<0)
         {
-            CmdRespawn();
+            //CmdRespawn();
         }
     }
 
