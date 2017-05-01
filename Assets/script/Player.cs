@@ -176,9 +176,22 @@ public class Player : NetworkBehaviour {
         GameObject rectTrans= GameObject.Find("mire");
         Text mire = rectTrans.GetComponent<Text>();
 
-        Vector3 viewPos = Camera.main.WorldToScreenPoint(GameObject.FindWithTag("Player").transform.position);
-       
-        print(viewPos);
+        float mindist = Mathf.Infinity;
+        Vector3 currentPos = transform.position;
+        GameObject[] pos = GameObject.FindGameObjectsWithTag("Player");
+        GameObject closest = this.gameObject;
+        foreach(GameObject obj in pos)
+        {
+            Vector3 diff = obj.transform.position - currentPos;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < mindist && curDistance !=0)
+            {
+                closest = obj;
+                mindist = curDistance;
+            }
+        }
+
+        Vector3 viewPos = Camera.main.WorldToScreenPoint(closest.transform.position);
         //print(Screen.height + " width: " + Screen.width);
         //729 1440
         if (viewPos.x < 0)
@@ -250,9 +263,7 @@ public class Player : NetworkBehaviour {
     [Command]
     void CmdRespawn()
     {
-
         print("Respawn");
-
         //GameObject player = Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
         //NetworkServer.UnSpawn(this.gameObject);
         //NetworkServer.Spawn(player);
@@ -262,7 +273,7 @@ public class Player : NetworkBehaviour {
         //NetworkServer.Spawn(player);
         //NetworkServer.ReplacePlayerForConnection(this.connectionToClient, player, this.playerControllerId);
         //var spawn = NetworkManager.singleton.GetStartPosition();
-        var newPlayer = (GameObject)Instantiate(NetworkManager.singleton.playerPrefab, Vector3.zero, Quaternion.identity);
+        var newPlayer = (GameObject)Instantiate(NetworkManager.singleton.playerPrefab, new Vector3(Random.Range(-FIELDLIMIT, FIELDLIMIT), Random.Range(-FIELDLIMIT, FIELDLIMIT), Random.Range(-FIELDLIMIT, FIELDLIMIT)), Quaternion.identity);
         Destroy(this.gameObject);
         //NetworkServer.Destroy(this.gameObject);
         NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer, this.playerControllerId);
