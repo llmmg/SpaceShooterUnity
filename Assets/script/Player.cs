@@ -40,6 +40,7 @@ public class Player : NetworkBehaviour {
     /* Field tools */
     public int FIELDLIMIT = 500;
 
+
     // Use this for initialization
     void Start () {
 
@@ -170,6 +171,18 @@ public class Player : NetworkBehaviour {
             if (this.speed >2)
                 speed -= 0.3f;
         }
+
+        //tracking --test
+        GameObject rectTrans= GameObject.Find("mire");
+        Text mire = rectTrans.GetComponent<Text>();
+
+        Vector3 viewPos = Camera.main.WorldToScreenPoint(GameObject.FindWithTag("Player").transform.position);
+       
+        print(viewPos);
+
+        mire.transform.position = (viewPos);       
+
+
     }
 
     [Command]
@@ -235,7 +248,7 @@ public class Player : NetworkBehaviour {
         NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer, this.playerControllerId);
 
 
-
+       
     }
 
 
