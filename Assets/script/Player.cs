@@ -1,43 +1,48 @@
 ﻿using System.Timers;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Player : NetworkBehaviour {
 
     private Rigidbody rb;
     private Mesh theMesh;
 
+    /* Movement Tools */
     public float speed;
     public float horTurnSpeed;
     public float verTurnSpeed;
 
+    /* Shoot tools */
     public GameObject bulletPrefab;
-
     public Transform bulletSpawn;
     public Transform bulletSpawn2;
 
-    //player
+    /* Rotate tools */
     public Transform myObject;
     private Vector3[] originalVerts;
     private Vector3[] rotatedVerts;
     private float rotateAngleY;
-
     private float nextActionTime;
     public float period;
 
     public int Startlife;
 
     private int life;
+
     private int score=0;
+    Text scoreText;
 
-    /* Const variables */
-    private const int FIELDLIMIT = 500;
+    /* Life tools */
+    private int life =10;
+    Text lifeText;
 
-    
-    
+    /* Field tools */
+    public int FIELDLIMIT = 500;
 
     // Use this for initialization
     void Start () {
+
         rotateAngleY = 0;
         speed = 10f;
         rb.maxAngularVelocity = 2;
@@ -46,11 +51,20 @@ public class Player : NetworkBehaviour {
         {
             myObject = this.transform;           
         }
-        
+
+        /* Get Life text */
+        GameObject objLife = GameObject.Find("lifeText");
+        lifeText = objLife.GetComponent<Text>();
+
+        /* Get Score text */
+        GameObject objScore = GameObject.Find("scoreText");
+        scoreText = objScore.GetComponent<Text>();
+
+
+        /* Mesh Initialisation */
         theMesh = myObject.GetComponent<MeshFilter>().mesh as Mesh;
         originalVerts = new Vector3[theMesh.vertices.Length];
         originalVerts = theMesh.vertices;
-
         rotatedVerts = new Vector3[originalVerts.Length];
 
         //init life points
@@ -58,7 +72,7 @@ public class Player : NetworkBehaviour {
 
         //Re-orient object
         //RotateMesh();
-	}
+    }
     void RotateMesh()
     {
         Quaternion qAngle = Quaternion.AngleAxis(rotateAngleY, Vector3.up);
@@ -66,23 +80,36 @@ public class Player : NetworkBehaviour {
         {
             rotatedVerts[vert] = qAngle * originalVerts[vert];
         }
-
         theMesh.vertices = rotatedVerts;
     }
-	public void incScore(int value)
+
+
+    /* Score informations */
+    public void incScore(int value)
     {
-        score += value;
+        if (isLocalPlayer)
+        {
+            score += value;
+            Debug.Log(score);
+            scoreText.text = string.Format("Score: {0}", score);
+        }
+
     }
-    void LostLife()
+
+    /* Life informations */
+    private void LostLife()
     {
         life = life - 1;
     
         if (life <= 0)
         {
+            lifeText.text = string.Format("Life: {0}", life);
             life = Startlife;
             CmdRespawn();
         }
     }
+
+    /* Repos if out of field */
     void rePos(Rigidbody rb)
     {
         if (transform.position.x < -FIELDLIMIT)
@@ -102,8 +129,11 @@ public class Player : NetworkBehaviour {
 
     // Update is called once per frame
     void LateUpdate() {
-        //rePos(rb);
 
+        /* Limit field of server */
+        rePos(rb);
+
+        /* Speed adaptation */
         rb.velocity = transform.forward * speed;
         float x = Input.GetAxis("Vertical");
         float y = Input.GetAxis("Horizontal");
@@ -112,7 +142,6 @@ public class Player : NetworkBehaviour {
         rb.AddRelativeTorque(x * verTurnSpeed * Time.deltaTime, y * horTurnSpeed * Time.deltaTime, 0);
         //barel roll
         rb.AddRelativeTorque(y * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);
-        //rb.AddRelativeTorque(x * (-1) * verTurnSpeed * Vector3.forward * Time.deltaTime);
 
 
         //shooting 
@@ -171,8 +200,11 @@ public class Player : NetworkBehaviour {
     }
     private void OnCollisionEnter(Collision collision)
     {
+
+        /* Player lost 1 life */
 		LostLife();
         print("collision with "+ collision.gameObject.name+" life:"+life.ToString());
+
     }
 
     [Command]
@@ -203,5 +235,6 @@ public class Player : NetworkBehaviour {
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
     }
 }
