@@ -26,15 +26,16 @@ public class Player : NetworkBehaviour {
     private float nextActionTime;
     public float period;
 
-  
 
+    /* Score tools */
     private int score=0;
     Text scoreText;
+    public int StartScore;
 
     /* Life tools */
     Text lifeText;
-    public int Startlife;
     private int life;
+    public int StartLife;
 
     /* Field tools */
     public int FIELDLIMIT = 500;
@@ -46,6 +47,7 @@ public class Player : NetworkBehaviour {
         speed = 10f;
         rb.maxAngularVelocity = 2;
 
+        /* Get transform */
         if (!myObject)
         {
             myObject = this.transform;           
@@ -67,7 +69,8 @@ public class Player : NetworkBehaviour {
         rotatedVerts = new Vector3[originalVerts.Length];
 
         //init life points
-        life = Startlife;
+        life = StartLife;
+        score = StartScore;
 
         //Re-orient object
         //RotateMesh();
@@ -98,13 +101,17 @@ public class Player : NetworkBehaviour {
     /* Life informations */
     private void LostLife()
     {
-        life = life - 1;
-    
-        if (life <= 0)
+        if (isLocalPlayer)
         {
+            life = life - 1;
             lifeText.text = string.Format("Life: {0}", life);
-            life = Startlife;
-            CmdRespawn();
+            /* When he got 0 life, respawn */
+            if (life < 0)
+            {
+                CmdRespawn();
+                life = StartLife;
+                //score = 0;
+            }
         }
     }
 
@@ -199,19 +206,9 @@ public class Player : NetworkBehaviour {
     }
     private void OnCollisionEnter(Collision collision)
     {
-
         /* Player lost 1 life */
 		LostLife();
         print("collision with "+ collision.gameObject.name+" life:"+life.ToString());
-
-        /* When he got 0 life, respawn */
-        if (life<0)
-        {
-            CmdRespawn();
-            //score = 0;
-            life = 10;
-        }
-
     }
 
     [Command]
