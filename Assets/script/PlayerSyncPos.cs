@@ -13,6 +13,7 @@ public class PlayerSyncPos : NetworkBehaviour {
     
     [SerializeField]
     Transform myTransform; //...player transform
+
     [SerializeField]
     float lerpRate=15;
 	
@@ -56,6 +57,7 @@ public class PlayerSyncPos : NetworkBehaviour {
             CmdProvidePosToServer(myTransform.position);
         }
     }
+
     [Client]
     void TransmitRotation()
     {

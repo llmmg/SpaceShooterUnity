@@ -25,7 +25,9 @@ public class Player : NetworkBehaviour {
     private float nextActionTime;
     public float period;
 
-    private int life=10;
+    public int Startlife;
+
+    private int life;
     private int score=0;
 
     /* Const variables */
@@ -42,8 +44,7 @@ public class Player : NetworkBehaviour {
 
         if (!myObject)
         {
-            myObject = this.transform;
-           
+            myObject = this.transform;           
         }
         
         theMesh = myObject.GetComponent<MeshFilter>().mesh as Mesh;
@@ -51,6 +52,9 @@ public class Player : NetworkBehaviour {
         originalVerts = theMesh.vertices;
 
         rotatedVerts = new Vector3[originalVerts.Length];
+
+        //init life points
+        life = Startlife;
 
         //Re-orient object
         //RotateMesh();
@@ -72,6 +76,12 @@ public class Player : NetworkBehaviour {
     void LostLife()
     {
         life = life - 1;
+    
+        if (life <= 0)
+        {
+            life = Startlife;
+            CmdRespawn();
+        }
     }
     void rePos(Rigidbody rb)
     {
@@ -145,8 +155,8 @@ public class Player : NetworkBehaviour {
 
 
             // Add velocity to the bullet
-            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60+ myObject.transform.forward;
-            bullet2.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60 + myObject.transform.forward;
+            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60;
+            bullet2.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60;
 
             NetworkServer.Spawn(bullet);
             NetworkServer.Spawn(bullet2);
@@ -162,27 +172,31 @@ public class Player : NetworkBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
 		LostLife();
-        if (life<0)
-        {
-            //CmdRespawn();
-        }
+        print("collision with "+ collision.gameObject.name+" life:"+life.ToString());
     }
 
     [Command]
     void CmdRespawn()
     {
+
+        print("Respawn");
+
         GameObject player = Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
         //NetworkServer.UnSpawn(this.gameObject);
         //NetworkServer.Spawn(player);
         NetworkManager.Destroy(this.gameObject);
         NetworkServer.DestroyPlayersForConnection(this.connectionToClient);
         NetworkServer.AddPlayerForConnection(this.connectionToClient,player,this.playerControllerId);
+        NetworkServer.Spawn(player);
         //NetworkServer.ReplacePlayerForConnection(this.connectionToClient, player, this.playerControllerId);
         //var spawn = NetworkManager.singleton.GetStartPosition();
         //var newPlayer = (GameObject)Instantiate(NetworkManager.singleton.playerPrefab, Vector3.zero, Quaternion.identity);
         //Destroy(this.gameObject);
         //NetworkServer.Destroy(this.gameObject);
         //NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer, this.playerControllerId);
+
+
+        
     }
 
 

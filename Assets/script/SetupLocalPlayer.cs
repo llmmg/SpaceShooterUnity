@@ -5,8 +5,11 @@ using UnityEngine.Networking;
 
 public class SetupLocalPlayer : NetworkBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    private float newRotation;
+    private float oldRotation;
+
+    // Use this for initialization
+    void Start () {
         if (isLocalPlayer)
         {
             GetComponent<Player>().enabled = true;
@@ -16,8 +19,8 @@ public class SetupLocalPlayer : NetworkBehaviour {
             //Camera.main.transform.position = this.transform.position - this.transform.forward* this.transform.localScale.x*6 + this.transform.up*this.transform.localScale.y*4;
             Camera.main.transform.LookAt(this.transform.position);
             Camera.main.transform.parent = this.transform;
-        }
             
+        }            
         //Camera.main.GetComponent().target=transform;
     }
 }
