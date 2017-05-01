@@ -160,9 +160,10 @@ public class Player : NetworkBehaviour {
     [Command]
     void CmdFire()
     {
-         if(Time.time > nextActionTime)
+
+        if (Time.time > nextActionTime)
         {
-            nextActionTime += period;
+            nextActionTime = Time.time+period;
             
             // Create the Bullet from the Bullet Prefab
             GameObject bullet = (GameObject)Instantiate(
@@ -177,8 +178,8 @@ public class Player : NetworkBehaviour {
 
 
             // Add velocity to the bullet
-            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60;
-            bullet2.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60;
+            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60+ myObject.transform.forward;
+            bullet2.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60 + myObject.transform.forward;
 
             NetworkServer.Spawn(bullet);
             NetworkServer.Spawn(bullet2);
@@ -186,6 +187,7 @@ public class Player : NetworkBehaviour {
             // Destroy the bullet after 5 seconds
             Destroy(bullet, 5.0f);
             Destroy(bullet2, 5.0f);
+
         }
            
 
