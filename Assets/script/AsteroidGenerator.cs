@@ -19,7 +19,7 @@ public class AsteroidGenerator : NetworkBehaviour {
         for(int i=0;i<NUMBER_OF_ASTEROIDS; i++)
         {
             GameObject clone = (GameObject)Instantiate(AsteroidPrefab, new Vector3(Random.Range(-FIELDLIMIT, FIELDLIMIT), Random.Range(-FIELDLIMIT, FIELDLIMIT), Random.Range(-FIELDLIMIT, FIELDLIMIT)), Quaternion.Euler(new Vector3(Random.Range(0, 90), Random.Range(0, 90), Random.Range(0, 90))));
-            clone.transform.localScale= new Vector3(Random.Range(MIN_ASTEROID_SIZE, MAX_ASTEROID_SIZE), Random.Range(MIN_ASTEROID_SIZE, MAX_ASTEROID_SIZE), Random.Range(MIN_ASTEROID_SIZE, MAX_ASTEROID_SIZE));
+            //clone.transform.localScale= new Vector3(Random.Range(MIN_ASTEROID_SIZE, MAX_ASTEROID_SIZE), Random.Range(MIN_ASTEROID_SIZE, MAX_ASTEROID_SIZE), Random.Range(MIN_ASTEROID_SIZE, MAX_ASTEROID_SIZE));
             NetworkServer.Spawn(clone);
         }
 
