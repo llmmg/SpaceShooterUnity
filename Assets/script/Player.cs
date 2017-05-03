@@ -111,7 +111,7 @@ public class Player : NetworkBehaviour {
             life = life - 1;
             lifeText.text = string.Format("Life: {0}", life);
             /* When he got 0 life, respawn */
-            if (life < 0)
+            if (life <= 0)
             {
                 CmdRespawn();
                 life = StartLife;
@@ -162,17 +162,30 @@ public class Player : NetworkBehaviour {
         {          
             CmdFire();
         }
-        //shooting 
-        if (Input.GetKey(KeyCode.LeftShift))
+        //speedup
+        if (Input.GetKey(KeyCode.P))
         {
-            if (this.speed < 40)
+            if (this.speed < 35)
                 speed += 0.3f;
         }
-        //shooting 
-        if (Input.GetKey(KeyCode.LeftControl))
+        //slowdown
+        if (Input.GetKey(KeyCode.L))
         {
             if (this.speed >2)
                 speed -= 0.3f;
+        }
+
+        //SUPERSPEED
+        if (Input.GetKey(KeyCode.O))
+        {
+            if (this.speed < 100)
+                speed += 2f;
+        }
+        //shooting 
+        if (Input.GetKey(KeyCode.K))
+        {
+            if (this.speed > 2)
+                speed -= 2f;
         }
 
         //tracking --test
@@ -284,8 +297,8 @@ public class Player : NetworkBehaviour {
 
 
             // Add velocity to the bullet
-            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60;
-            bullet2.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 60;
+            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 80;
+            bullet2.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 80;
 
             NetworkServer.Spawn(bullet);
             NetworkServer.Spawn(bullet2);
